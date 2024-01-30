@@ -1,93 +1,69 @@
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { fetchAddContactThunk } from 'slice/contacts/thunk';
+import { selectContact } from 'slice/contacts/selector';
+
+import csscontform from './ContactForm.module.css';
+
 import { nanoid } from 'nanoid';
-import { Formik, ErrorMessage } from 'formik';
-import * as yup from 'yup';
-
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-
-import { addContact } from '../../redux/operations';
-import { getContacts } from '../../redux/selectors';
-
-import { Button, Container, ErrorText, Input, Text } from './ContactForm.styled';
 
 
 
-
-const initialValues = {
-  name: '',
-  number: '',
-};
-
-let userSchema = yup.object({
-  name: yup
-    .string()
-    .matches(
-      /^[a-zA-Zа-яА-ЯґєіїҐЄІЇ]+(([' -][a-zA-Zа-яА-ЯґєіїҐЄІЇ ])?[a-zA-Zа-яА-ЯґєіїҐЄІЇ]*)*$/
-    )
-    .required(),
-  number: yup
-    .string()
-    .matches(
-      /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/
-    )
-    .required(),
-});
-
-export function ContactForm() {
+export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContact);
+  const [formData, setFormData] = useState({ name: '', number: '' });
 
-  const handleOnSubmit = (values, actions) => {
-    if (
-      contacts.find(
-        contact => contact.name.toLowerCase() === values.name.toLowerCase()
-      ) === undefined
-    ) {
-      const item = { id: nanoid(), name: values.name, number: values.number };
-      dispatch(addContact(item));
-      actions.resetForm();
-    } else {
-      alert(`${values.name} is already in contacts.`);
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const isContactExists =
+      contacts &&
+      contacts.some(
+        contact =>
+          contact.name.toLowerCase() === formData.name.toLowerCase() ||
+          contact.number === formData.number
+      );
+
+    if (isContactExists) {
+      alert('Contact with the same name or number already exists!');
+      return;
     }
+
+    dispatch(fetchAddContactThunk({ ...formData, id: nanoid() }));
+    setFormData({ name: '', number: '' });
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleOnSubmit}
-      validationSchema={userSchema}
-    >
-      <Container>
-        <Text>Name</Text>
-        <Input
-          type="text"
-          name="name"
-          title="Name may contain only letters, apostrophe, dash and spaces."
-        />
-        <ErrorMessage name="name">
-          {() => (
-            <ErrorText>
-              Wrong name: Name may contain only letters, apostrophe, dash and
-              spaces.
-            </ErrorText>
-          )}
-        </ErrorMessage>
-        <Text>Number</Text>
-        <Input
-          type="tel"
-          name="number"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-        />
-        <ErrorMessage name="number">
-          {() => (
-            <ErrorText>
-              Phone number must be digits and can contain spaces, dashes,
-              parentheses and can start with +
-            </ErrorText>
-          )}
-        </ErrorMessage>
-        <Button type="Submit">Add contact</Button>
-      </Container>
-    </Formik>
+    <form className={csscontform.contact_form} onSubmit={handleSubmit}>
+      <h3>Name</h3>
+      <input
+        className={csscontform.cont_input}
+        type="text"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+        placeholder="Name"
+      />
+      <h3>Number</h3>
+      <input
+        className={csscontform.input}
+        type="tel"
+        name="number"
+        value={formData.number}
+        onChange={handleChange}
+        required
+        placeholder="Phone number"
+      />
+      <button className={csscontform.cont_btn} type="submit">
+        Add contact
+      </button>
+    </form>
   );
-}
+};

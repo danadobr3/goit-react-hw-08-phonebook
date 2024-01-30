@@ -1,0 +1,39 @@
+.list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px auto;
+    padding: 0;
+    width: 80%;
+}
+
+.itemName {
+    font-weight: 500;
+}
+
+.delete_btn {
+cursor: pointer;
+    padding: 8px;
+    background-color: #f3f6f9;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    /* margin: 0 auto; */
+    /* margin-top: 15px;
+    margin-bottom: 15px; */
+    transition: all 0.8s;
+    text-align: center;
+    padding: 10px;
+
+
+    &:hover,
+    &:focus {
+        background-color: black;
+        color: white;
+    }
+}

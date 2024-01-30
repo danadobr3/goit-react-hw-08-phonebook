@@ -1,0 +1,33 @@
+.logout {
+  display: flex;
+  justify-content: right;
+  margin-right: 40px;
+  margin-top: 10px;
+}
+
+.user_email {
+  margin-right: 20px;
+  margin-top: 5px;
+  color: yellow;
+  text-decoration: underline;
+}
+
+.btn_logout {
+  cursor: pointer;
+  padding: 8px;
+  background-color: #f3f6f9;
+  border: none;
+  border-radius: 20px;
+  font-size: 15px;
+  margin: 0 auto;
+  transition: all 0.8s;
+  text-align: center;
+  padding: 10px;
+      
+      
+  &:hover,
+  &:focus {
+  background-color: black;
+  color: white;
+}
+}

@@ -1,26 +1,25 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { changeFilter } from '../../redux/filterSlice';
-import { getFilter } from '../../redux/selectors';
+import { setFilter } from '../../slice/contacts/filterSlice';
+import { selectFilter } from 'slice/contacts/selector';
 
-import { Form, Input, Label } from './Filter.styled';
-
-
+import cssfilter from './Filter.module.css';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(getFilter);
+  const filter = useSelector(selectFilter);
+  const onChange = e => {
+    dispatch(setFilter(e.target.value));
+  };
 
   return (
-    <Form>
-      <Label>Filter contacts by name: </Label>
-      <Input
-        type="text"
-        value={filter}
-        onChange={e => {
-          dispatch(changeFilter(e.target.value));
-        }}
-      />
-    </Form>
+    <input
+      className={cssfilter.search_user}
+      type="text"
+      value={filter}
+      onChange={onChange}
+      placeholder="Search contacts"
+    />
   );
 };
