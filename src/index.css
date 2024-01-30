@@ -141,6 +141,6 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 80px;
+  gap: 100px;
   margin-bottom: 15px;
 }

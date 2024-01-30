@@ -63,7 +63,7 @@ function RegisterForm() {
         </div>
         <div className={cssauth.btn_div}>
           <button className={cssauth.btn_submit} type="submit">
-            Sign up
+            Register
           </button>
         </div>
       </form>
